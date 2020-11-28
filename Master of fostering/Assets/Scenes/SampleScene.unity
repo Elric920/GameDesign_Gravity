@@ -181,7 +181,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219645280}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: -1.9, z: -10}
+  m_LocalPosition: {x: -0.75, y: -1.49, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1350600935}
@@ -299,7 +299,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: -1.9, z: -10}
+  m_LocalPosition: {x: -0.75, y: -1.49, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -605,7 +605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 218134621, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
       propertyPath: maxForce
-      value: 1000
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 1800165820544926, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
       propertyPath: m_Name
@@ -613,11 +613,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4266181835105240, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: -0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4266181835105240, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.9
+      value: -1.49
       objectReference: {fileID: 0}
     - target: {fileID: 4266181835105240, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
       propertyPath: m_LocalPosition.z
@@ -665,8 +665,35 @@ PrefabInstance:
       propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 58541635375095730, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
+--- !u!1 &1131846585 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1800165820544926, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa,
+    type: 3}
+  m_PrefabInstance: {fileID: 1024681146}
+  m_PrefabAsset: {fileID: 0}
+--- !u!58 &1131846586
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131846585}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.11
 --- !u!1 &1350600934
 GameObject:
   m_ObjectHideFlags: 3
@@ -748,7 +775,7 @@ GameObject:
   - component: {fileID: 1395482861}
   m_Layer: 8
   m_Name: tile
-  m_TagString: Untagged
+  m_TagString: semiStableStone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -969,7 +996,7 @@ GameObject:
   - component: {fileID: 1446726799}
   m_Layer: 8
   m_Name: Tilemap
-  m_TagString: Untagged
+  m_TagString: stableStone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

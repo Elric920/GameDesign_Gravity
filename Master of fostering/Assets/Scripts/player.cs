@@ -4,19 +4,26 @@ using UnityEngine;
 using System.IO;
 
 public class player : MonoBehaviour {
+
     Transform players;
     Vector3 shootAngle;
     Camera cam;
     Transform hand;
-
-    bool canjump = false;
     private Rigidbody2D rb2d;
+
+
+    //小球状态相关变量
+    //记录小球碰撞的物体类型：[0]稳定石、[1]半稳定石、[2]不稳定石
+    private int[] collisionType = {0,0,0};
+    
+
+
+    //小球弹跳相关变量
     public float maxForce=500f;
     public float minForce = 400f;
     static private float downTime = 0f;
     static private float upTime = 0f;
     static private float force = 0;
-
 
     //MatthewChen's Code 11.28 13:17 v1.0
     public GameObject floatObject;
@@ -27,9 +34,7 @@ public class player : MonoBehaviour {
     void Start()
     {
         cam = Camera.main;
-        players = this.GetComponent<Transform>();
-        //LayerMask floorMask = 1 << 8;
-        //bullet = Resources.Load<GameObject>("prefabs/bullet");
+        players = this.GetComponent<Transform>(); 
         hand = transform.Find("hand");
         rb2d=this.GetComponent<Rigidbody2D>();
     }
@@ -59,34 +64,59 @@ public class player : MonoBehaviour {
         players.transform.up = mouseposition - playerposition;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)//碰撞发生，将对应元素置1
+    {
+        if (collision.tag == "stableStone")
+        {
+            collisionType[0] = 1;
+            
+        }
+            
+        if (collision.tag == "semiStableStone")
+        {
+            collisionType[1] = 1;
+        }
+            
+        if (collision.tag == "nonStableStone")
+        {
+            collisionType[2] = 1;
+        }
+            
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)//碰撞结束，将对应元素置0
+    {
+        if (collision.tag == "stableStone")
+        {
+            collisionType[0] = 0;
+        }
+            
+        if (collision.tag == "semiStableStone")
+        {
+            collisionType[1] = 0;
+        }
+            
+        if (collision.tag == "nonStableStone")
+        {
+            collisionType[2] = 0;
+        }
+            
+    }
+
     void Jumping(float force)//小球的弹跳函数
     {
-        if (Input.GetMouseButtonUp(0) && canjump == true)
+        if (Input.GetMouseButtonUp(0) && collisionType[0] == 1)//小球碰到了稳定石
         {
             rb2d.AddForce(-transform.up * force);
         }
-        if (Physics2D.Raycast(hand.transform.position, players.up, 1f,
-               1 << LayerMask.NameToLayer("Collider")))
-        {
-           // Debug.Log("can jump");
-            canjump = true;
-        }
-        if (!Physics2D.Raycast(hand.transform.position, players.up, 1f,
-               1 << LayerMask.NameToLayer("Collider")))
-        {
-           // Debug.Log("can not jump");
-            canjump = false;
-        }            
     }
 
     float MouseDownTime()//返回鼠标在允许小球弹跳的情况下按下的时间
     {
         float deltTime = 0;
-        if (Input.GetMouseButtonDown(0)&& Physics2D.Raycast(hand.transform.position, players.up, 5f,
-               1 << LayerMask.NameToLayer("Collider")))
+        if (Input.GetMouseButtonDown(0)&& collisionType != null)
             downTime = Time.time;
-        if (Input.GetMouseButtonUp(0)&& Physics2D.Raycast(hand.transform.position, players.up, 5f,
-               1 << LayerMask.NameToLayer("Collider")))
+        if (Input.GetMouseButtonUp(0)&& collisionType != null)
         {
             upTime = Time.time;
             deltTime = upTime - downTime;
@@ -106,8 +136,6 @@ public class player : MonoBehaviour {
     }
     
     
-    
-
 
     public Vector3 ShootAngle
     {
