@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 58541635375095730}
   - component: {fileID: 50000273667768360}
   - component: {fileID: 218134621}
+  - component: {fileID: 1131846586}
   m_Layer: 0
   m_Name: crazyball
   m_TagString: Player
@@ -227,8 +228,8 @@ Rigidbody2D:
   m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &218134621
 MonoBehaviour:
@@ -242,5 +243,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f66c2d1bf6267646a74a4020067d433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxForce: 1000
+  maxForce: 1500
   minForce: 500
+  floatObject: {fileID: 0}
+  doorToNextLevel: {fileID: 0}
+--- !u!58 &1131846586
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800165820544926}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.11

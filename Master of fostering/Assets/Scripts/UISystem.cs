@@ -34,4 +34,10 @@ public class UISystem : MonoBehaviour
         envelopesText.text = m_EnvelopeNums.ToString();
     }
 
+    public bool GetIfCollectedAllKeys()
+    {
+        if (m_KeyNums == maxKeys) return true;
+        else return false;
+    }
+
 }

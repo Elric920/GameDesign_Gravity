@@ -23,10 +23,13 @@ public class player : MonoBehaviour {
     public float minForce = 400f;
     static private float downTime = 0f;
     static private float upTime = 0f;
-    static private float force = 0;
+    static private float force = 0f;
 
     //MatthewChen's Code 11.28 13:17 v1.0
     public GameObject floatObject;
+    public GameObject doorToNextLevel;
+    //MatthewChen's Code 11.28 23:30 v1.0
+    bool m_DoorIsDetected = false;
 
 
 
@@ -54,6 +57,20 @@ public class player : MonoBehaviour {
             liftUp.StartLift();
         }
 
+        //Matthew 11.28 23:30
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            if(m_DoorIsDetected) 
+            {
+                DoorController doorController = doorToNextLevel.GetComponent<DoorController>();
+                if(doorController != null)
+                {
+                    doorController.DisplayDialog();
+                }
+                else Debug.Log("Door Detected but there is no right script attached to it.");
+            }
+        }
+
     }
 
     void Turning()//小球的转向函数
@@ -72,14 +89,19 @@ public class player : MonoBehaviour {
             
         }
             
-        if (collision.tag == "semiStableStone")
+        else if (collision.tag == "semiStableStone")
         {
             collisionType[1] = 1;
         }
             
-        if (collision.tag == "nonStableStone")
+        else if (collision.tag == "nonStableStone")
         {
             collisionType[2] = 1;
+        }
+
+        else if(collision.tag == "door")
+        {
+            m_DoorIsDetected = true;
         }
             
     }
@@ -91,14 +113,19 @@ public class player : MonoBehaviour {
             collisionType[0] = 0;
         }
             
-        if (collision.tag == "semiStableStone")
+        else if (collision.tag == "semiStableStone")
         {
             collisionType[1] = 0;
         }
             
-        if (collision.tag == "nonStableStone")
+        else if (collision.tag == "nonStableStone")
         {
             collisionType[2] = 0;
+        }
+
+        else if(collision.tag == "door")
+        {
+            m_DoorIsDetected = false;
         }
             
     }
