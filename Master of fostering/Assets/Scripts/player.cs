@@ -21,6 +21,8 @@ public class player : MonoBehaviour {
     //小球弹跳相关变量
     public float maxForce=500f;
     public float minForce = 400f;
+    [Tooltip("小球最长蓄力时长(单位为s)：")]
+    public float maxPressTime = 1.0f;
     static private float downTime = 0f;
     static private float upTime = 0f;
     static private float force = 0f;
@@ -30,6 +32,7 @@ public class player : MonoBehaviour {
     public GameObject doorToNextLevel;
     //MatthewChen's Code 11.28 23:30 v1.0
     bool m_DoorIsDetected = false;
+    float m_PressDuringTime;
 
 
 
@@ -40,19 +43,18 @@ public class player : MonoBehaviour {
         players = this.GetComponent<Transform>(); 
         hand = transform.Find("hand");
         rb2d=this.GetComponent<Rigidbody2D>();
+        m_PressDuringTime = 0.0f;
     }
 
     void Update()
     {
         Turning();
-        force = ForceValue(MouseDownTime(),maxForce,minForce);
-        Jumping(force);
+        TestMouseButton0();  //检测鼠标左键输入
 
 
         //Matthew 11.28 13:19
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Space Touched!");
             LiftUp liftUp = floatObject.GetComponent<LiftUp>();
             liftUp.StartLift();
         }
@@ -132,34 +134,35 @@ public class player : MonoBehaviour {
 
     void Jumping(float force)//小球的弹跳函数
     {
-        if (Input.GetMouseButtonUp(0) && collisionType[0] == 1)//小球碰到了稳定石
+        if (collisionType[0] == 1)//小球碰到了稳定石
         {
             rb2d.AddForce(-transform.up * force);
         }
     }
 
-    float MouseDownTime()//返回鼠标在允许小球弹跳的情况下按下的时间
+    void TestMouseButton0()//检测鼠标在允许小球弹跳的情况下按下的时间
     {
-        float deltTime = 0;
-        if (Input.GetMouseButtonDown(0)&& collisionType != null)
-            downTime = Time.time;
-        if (Input.GetMouseButtonUp(0)&& collisionType != null)
+        if(Input.GetAxis("MouseButton0") > 10e-6)
         {
-            upTime = Time.time;
-            deltTime = upTime - downTime;
+           m_PressDuringTime += Time.deltaTime;
+           UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
+           return;
         }
-        if (deltTime > 0.01 && deltTime < 0.1)//如果按下鼠标的时间过短，则认为按下了0.1s
-            deltTime = 0.1f;
-        if (deltTime > 1)//如果按下鼠标的时间超过1s，则认为按下了1s
-            deltTime = 1f;
-        return deltTime;
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (m_PressDuringTime > 0.01 && m_PressDuringTime < 0.1)//如果按下鼠标的时间过短，则认为按下了0.1s
+            m_PressDuringTime = 0.1f;
+            if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限，则置为最大时限
+            m_PressDuringTime = maxPressTime;
+            Jumping(ForceValue(m_PressDuringTime, maxForce, minForce));
+            UISystem.instance.ReleaseEnergy();
+            m_PressDuringTime = 0;
+        }
     }
 
     float ForceValue(float delT,float maxF,float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
     {
-        float force=0;
-        force = ((maxF-minF)/0.9f) * (delT-1) + maxF;//呈线性变化
-        return force;
+         return ((maxF-minF)/0.9f) * (delT-1) + maxF;//呈线性变化
     }
     
     
