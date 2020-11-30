@@ -138,6 +138,10 @@ public class player : MonoBehaviour {
         {
             rb2d.AddForce(-transform.up * force);
         }
+        if (collisionType[1] == 1)//小球碰到了半稳定石 20201130Du
+        {
+            rb2d.AddForce(-transform.up * force);//暂定与稳定石运动规律相同  20201130Du
+        }
     }
 
     void TestMouseButton0()//检测鼠标在允许小球弹跳的情况下按下的时间
