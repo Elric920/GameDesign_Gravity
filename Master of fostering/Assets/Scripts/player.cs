@@ -10,7 +10,8 @@ public class player : MonoBehaviour {
     Camera cam;
     Transform hand;
     private Rigidbody2D rb2d;
-
+    private Animator playerAni;
+    private int addingID = Animator.StringToHash("isAdding");
 
     //小球状态相关变量
     //记录小球碰撞的物体类型：[0]稳定石、[1]半稳定石、[2]不稳定石
@@ -44,6 +45,7 @@ public class player : MonoBehaviour {
         hand = transform.Find("hand");
         rb2d=this.GetComponent<Rigidbody2D>();
         m_PressDuringTime = 0.0f;
+        playerAni = this.GetComponent<Animator>();
     }
 
     void Update()
@@ -150,6 +152,7 @@ public class player : MonoBehaviour {
         {
            m_PressDuringTime += Time.deltaTime;
            UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
+            playerAni.SetBool(addingID,true);
            return;
         }
         if (Input.GetMouseButtonUp(0))
@@ -161,6 +164,7 @@ public class player : MonoBehaviour {
             Jumping(ForceValue(m_PressDuringTime, maxForce, minForce));
             UISystem.instance.ReleaseEnergy();
             m_PressDuringTime = 0;
+            playerAni.SetBool(addingID,false);
         }
     }
 
