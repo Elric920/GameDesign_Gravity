@@ -5,7 +5,7 @@ using System.IO;
 
 public class player : MonoBehaviour {
 
-    Transform players;
+    public Transform players;
     Vector3 shootAngle;
     Camera cam;
     Transform hand;
