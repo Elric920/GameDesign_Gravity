@@ -5,13 +5,12 @@ using System.IO;
 
 public class player : MonoBehaviour {
 
-    public Transform players;
+    Transform players;
     Vector3 shootAngle;
     Camera cam;
     Transform hand;
     private Rigidbody2D rb2d;
-    private Animator playerAni;
-    private int addingID = Animator.StringToHash("isAdding");
+
 
     //小球状态相关变量
     //记录小球碰撞的物体类型：[0]稳定石、[1]半稳定石、[2]不稳定石
@@ -24,9 +23,9 @@ public class player : MonoBehaviour {
     public float minForce = 400f;
     [Tooltip("小球最长蓄力时长(单位为s)：")]
     public float maxPressTime = 1.0f;
-    static private float downTime = 0f;
-    static private float upTime = 0f;
-    static private float force = 0f;
+    //static private float downTime = 0f;//Du 2020 1207 2034
+    //static private float upTime = 0f;//Du 2020 1207 2034
+    //static private float force = 0f;//Du 2020 1207 2034
 
     //MatthewChen's Code 11.28 13:17 v1.0
     public GameObject floatObject;
@@ -35,6 +34,10 @@ public class player : MonoBehaviour {
     bool m_DoorIsDetected = false;
     float m_PressDuringTime;
 
+    //小球刹车相关量 Du 2020 1207 2034
+    Vector2 playerVelocety;//记录玩家速度
+    public float breakAcceleration;//设定刹车加速度
+    bool playerBreaking=false;//记录小球是否刹车
 
 
 
@@ -45,17 +48,21 @@ public class player : MonoBehaviour {
         hand = transform.Find("hand");
         rb2d=this.GetComponent<Rigidbody2D>();
         m_PressDuringTime = 0.0f;
-        playerAni = this.GetComponent<Animator>();
+        playerVelocety=new Vector2(0,0);
     }
 
     void Update()
     {
         Turning();
-        TestMouseButton0();  //检测鼠标左键输入
+        TestMouseButton0();  //检测鼠标左键输入，控制小球弹跳
+
+        //Du 2020 1207 2034
+        RightMouseButtonDetection();//检测鼠标右键情况
+        if (playerBreaking==true) PlayerBreak();//刹车
 
 
         //Matthew 11.28 13:19
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             LiftUp liftUp = floatObject.GetComponent<LiftUp>();
             liftUp.StartLift();
@@ -152,7 +159,6 @@ public class player : MonoBehaviour {
         {
            m_PressDuringTime += Time.deltaTime;
            UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
-            playerAni.SetBool(addingID,true);
            return;
         }
         if (Input.GetMouseButtonUp(0))
@@ -164,16 +170,53 @@ public class player : MonoBehaviour {
             Jumping(ForceValue(m_PressDuringTime, maxForce, minForce));
             UISystem.instance.ReleaseEnergy();
             m_PressDuringTime = 0;
-            playerAni.SetBool(addingID,false);
         }
+
     }
 
     float ForceValue(float delT,float maxF,float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
     {
-         return ((maxF-minF)/0.9f) * (delT-1) + maxF;//呈线性变化
+        return ((maxF-minF)/0.9f) * (delT-1) + maxF;//呈线性变化
     }
-    
-    
+
+
+    void RightMouseButtonDetection()//检测鼠标右键是否已经按下Du 2020 1207 2034
+    {
+        if (Input.GetMouseButtonDown(1)) playerBreaking = true;
+        if (Input.GetMouseButtonUp(1)) playerBreaking = false;
+    }
+
+    void PlayerBreak()//小球刹车函数Du 2020 1207 2034
+    {
+        if (rb2d.velocity.x < 0f)//小球向左运动的刹车
+        {
+            print("左刹车");
+            playerVelocety = rb2d.velocity;
+            playerVelocety.x += breakAcceleration * Time.deltaTime;
+            if (playerVelocety.x > 0f) //刹车过度使速度为正,则将速度置零
+            {
+                playerVelocety.x = 0f;
+                rb2d.velocity = playerVelocety;
+            }
+            else rb2d.velocity = playerVelocety;//正常情况
+        }
+        if (rb2d.velocity.x > 0f)//小球向右运动的刹车
+        {
+            print("右刹车");
+            playerVelocety = rb2d.velocity;
+            playerVelocety.x -= breakAcceleration * Time.deltaTime;
+            if (playerVelocety.x <0f) //刹车过度使速度为负,则将速度置零
+            {
+                playerVelocety.x = 0f;
+                rb2d.velocity = playerVelocety;
+            }
+            else rb2d.velocity = playerVelocety;//正常情况
+        }
+    }   
+
+
+
+
 
     public Vector3 ShootAngle
     {
