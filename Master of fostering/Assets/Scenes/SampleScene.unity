@@ -442,7 +442,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564628216}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -920,6 +920,10 @@ PrefabInstance:
       propertyPath: doorToNextLevel
       value: 
       objectReference: {fileID: 2952405}
+    - target: {fileID: 218134621, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
+      propertyPath: breakAcceleration
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1800165820544926, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
       propertyPath: m_Name
       value: crazyball
