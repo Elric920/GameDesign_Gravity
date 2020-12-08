@@ -8,6 +8,7 @@ public class player : MonoBehaviour {
     public Transform players;
     Vector3 shootAngle;
     Camera cam;
+    Transform hand;
     private Rigidbody2D rb2d;
     private Animator playerAni;
     private int addingID = Animator.StringToHash("isAdding");
@@ -23,7 +24,10 @@ public class player : MonoBehaviour {
     public float minForce = 400f;
     [Tooltip("小球最长蓄力时长(单位为s)：")]
     public float maxPressTime = 1.0f;
-    
+    static private float downTime = 0f;
+    static private float upTime = 0f;
+    static private float force = 0f;
+
     //MatthewChen's Code 11.28 13:17 v1.0
     public GameObject floatObject;
     public GameObject doorToNextLevel;
@@ -38,6 +42,7 @@ public class player : MonoBehaviour {
     {
         cam = Camera.main;
         players = this.GetComponent<Transform>(); 
+        hand = transform.Find("hand");
         rb2d=this.GetComponent<Rigidbody2D>();
         m_PressDuringTime = 0.0f;
         playerAni = this.GetComponent<Animator>();
@@ -50,12 +55,11 @@ public class player : MonoBehaviour {
 
 
         //Matthew 11.28 13:19
-        /* if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             LiftUp liftUp = floatObject.GetComponent<LiftUp>();
             liftUp.StartLift();
-        } */  
-        //12.8禁用Lift模块
+        }
 
         //Matthew 11.28 23:30
         if(Input.GetKeyDown(KeyCode.Z))
@@ -184,12 +188,6 @@ public class player : MonoBehaviour {
         }
     }
 
-    //MatthewChen 12.8 13:53
-    public void Death()
-    {
-        //可能要先播个动画？？
-        rb2d.velocity = new Vector2(0.0f, 0.0f);
-        transform.position = SavingSystem.instance.GetLatestSavePoint();
-    }
+    //MatthewChen 11.28 Change v1
 
 }
