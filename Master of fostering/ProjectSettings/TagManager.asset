@@ -8,6 +8,7 @@ TagManager:
   - semiStableStone
   - nonStableStone
   - door
+  - CheckPoint
   layers:
   - Default
   - TransparentFX
