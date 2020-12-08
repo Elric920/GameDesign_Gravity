@@ -24,9 +24,13 @@ public class semiStone : MonoBehaviour
 
 
     //公开的变量
+    public bool moveDirectionIsUpright = true;//半稳定石类型
     public float semiUpVelocity = 0f;//半稳定石向上的运动速度
     public float semiDownVelocity = 0f;//半稳定石向下的运动速度
-    public float acceleratedSpeed = 0f;//半稳定石运动的加速度
+    public float semiLeftVelocity = 0f;//半稳定石向左的运动速度
+    public float semiRightVelocity = 0f;//半稳定石向右的运动速度
+
+    //public float acceleratedSpeed = 0f;//半稳定石运动的加速度
     public float movementDistance = 0f;//半稳定石的运动范围
 
     //半稳定石位置判断
@@ -54,14 +58,26 @@ public class semiStone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SemiStoneMoveState();//半稳定石运动状态判断
-        SemiStoneMove();//半稳定石运动
+
+        if (moveDirectionIsUpright == true)
+        {
+            SemiStoneMoveState_Upright();//半稳定石竖直运动状态判断
+            SemiStoneMove_Upright();//半稳定石竖直运动
+        }
+
+        if (moveDirectionIsUpright == false)
+        {
+            SemiStoneMoveState_Horizontal();//半稳定石竖直运动状态判断
+            SemiStoneMove_Horizontal();//半稳定石竖直运动
+
+        }
+
     }
 
-    void SemiStoneMoveState()//半稳定石运动状态判断
+    void SemiStoneMoveState_Upright()//半稳定石竖直运动状态判断
     {
         semip = semiStoneTrans.position;
-        if(semiP0.y==semip.y) semiStoneMoveState = 2;
+        if (semiP0.y == semip.y) semiStoneMoveState = 2;
         if ((semip.y - semiP0.y) >= 0 && (semip.y - semiP0.y) <= movementDistance)
             if (rb2D.velocity.y > 0) semiStoneMoveState = 2;
         if ((semip.y - semiP0.y) > movementDistance)
@@ -83,7 +99,7 @@ public class semiStone : MonoBehaviour
         }
     }
 
-    private void SemiStoneMove() //半稳定石的运动
+    private void SemiStoneMove_Upright() //半稳定石的运动
     {
         presentVelocity = rb2D.velocity;
         //if (semiStoneMoveState == 1)//半稳定石加速度向上的阶段
@@ -97,7 +113,7 @@ public class semiStone : MonoBehaviour
         {
             presentVelocity.y = semiUpVelocity;
             rb2D.velocity = presentVelocity;
-            print("匀速向上");
+            //  print("匀速向上");
         }
 
         //if (semiStoneMoveState == 3)//半稳定石匀减速向上的阶段
@@ -117,8 +133,8 @@ public class semiStone : MonoBehaviour
         if (semiStoneMoveState == 5)//半稳定石匀速向下的阶段
         {
             presentVelocity.y = -semiDownVelocity;
-            rb2D.velocity = presentVelocity; 
-            print("匀速向下");
+            rb2D.velocity = presentVelocity;
+            // print("匀速向下");
         }
         //if (semiStoneMoveState == 6)//半稳定石匀减速向下的阶段
         //{
@@ -128,6 +144,49 @@ public class semiStone : MonoBehaviour
         //    print("减速向下");
         //}
     }
+    void SemiStoneMoveState_Horizontal()//半稳定石水平运动状态判断
+    {
+        semip = semiStoneTrans.position;
+        if (semiP0.x == semip.x) semiStoneMoveState = 2;
+        if ((semip.x - semiP0.x) >= 0 && (semip.x - semiP0.x) <= movementDistance)
+            if (rb2D.velocity.x > 0) semiStoneMoveState = 2;
+        if ((semip.x - semiP0.x) > movementDistance)
+        {
+            position = this.transform.position;
+            position.x = semiP0.x + movementDistance;
+            this.transform.position = position;
+            semiStoneMoveState = 5;
+        }
+        if ((semip.x - semiP0.x) == movementDistance) semiStoneMoveState = 5;
+        if ((semip.x - semiP0.x) >= 0 && (semip.x - semiP0.x) <= movementDistance)
+            if (rb2D.velocity.x < 0) semiStoneMoveState = 5;
+        if (semip.x < semiP0.x)
+        {
+            position = this.transform.position;
+            position.x = semiP0.x;
+            this.transform.position = position;
+            semiStoneMoveState = 2;
+        }
+    }
+
+    private void SemiStoneMove_Horizontal() //半稳定石的运动
+    {
+        presentVelocity = rb2D.velocity;
+        if (semiStoneMoveState == 2)//半稳定石匀速向右阶段
+        {
+            presentVelocity.x = semiRightVelocity;
+            rb2D.velocity = presentVelocity;
+            //  print("匀速向右");
+        }
+        if (semiStoneMoveState == 5)//半稳定石匀速向左的阶段
+        {
+            presentVelocity.x = -semiLeftVelocity;
+            rb2D.velocity = presentVelocity;
+            // print("匀速向左");
+        }
+
+    }
+}
 
 
 
@@ -142,4 +201,4 @@ public class semiStone : MonoBehaviour
 
     //    }
     //}
-}
+
