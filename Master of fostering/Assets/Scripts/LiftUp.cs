@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LiftUp : MonoBehaviour
+/* public class LiftUp : MonoBehaviour
 {
     Rigidbody2D rigidbody2D;
     float m_LiftingTime;
@@ -63,4 +63,4 @@ public class LiftUp : MonoBehaviour
     {
         m_LiftingProcess = true;
     }
-}
+} */
