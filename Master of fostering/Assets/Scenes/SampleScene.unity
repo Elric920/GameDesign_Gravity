@@ -1003,6 +1003,10 @@ PrefabInstance:
       propertyPath: doorToNextLevel
       value: 
       objectReference: {fileID: 2952405}
+    - target: {fileID: 1568736375, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1800165820544926, guid: 7dbfb1ba998b8ae4397bcd06c74ccefa, type: 3}
       propertyPath: m_Name
       value: ballhat
