@@ -30,6 +30,7 @@ public class player : MonoBehaviour {
     //MatthewChen's Code 11.28 23:30 v1.0
     bool m_DoorIsDetected = false;
     float m_PressDuringTime;
+    AudioSource audioSource;
 
 
 
@@ -41,6 +42,7 @@ public class player : MonoBehaviour {
         rb2d=this.GetComponent<Rigidbody2D>();
         m_PressDuringTime = 0.0f;
         playerAni = this.GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -146,6 +148,7 @@ public class player : MonoBehaviour {
     {
         if(Input.GetAxis("MouseButton0") > 10e-6)
         {
+           if(!audioSource.isPlaying) audioSource.Play();
            m_PressDuringTime += Time.deltaTime;
            UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
             playerAni.SetBool(addingID,true);
@@ -161,6 +164,7 @@ public class player : MonoBehaviour {
             UISystem.instance.ReleaseEnergy();
             m_PressDuringTime = 0;
             playerAni.SetBool(addingID,false);
+            audioSource.Stop();
         }
     }
 
