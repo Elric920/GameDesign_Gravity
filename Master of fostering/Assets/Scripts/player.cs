@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.Rendering;
 
 public class player : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class player : MonoBehaviour {
     private Rigidbody2D rb2d;
     private Animator playerAni;
     private int addingID = Animator.StringToHash("isAdding");
+    public UnityEngine.Experimental.Rendering.Universal.Light2D lightOnLand;
 
     //小球状态相关变量
     //记录小球碰撞的物体类型：[0]稳定石、[1]半稳定石、[2]不稳定石
@@ -85,6 +87,7 @@ public class player : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)//碰撞发生，将对应元素置1
     {
+        lightOnLand.intensity = 0.3f;
         if (collision.tag == "stableStone")
         {
             collisionType[0] = 1;
@@ -110,6 +113,7 @@ public class player : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D collision)//碰撞结束，将对应元素置0
     {
+        lightOnLand.intensity = 0.0f;
         if (collision.tag == "stableStone")
         {
             collisionType[0] = 0;
