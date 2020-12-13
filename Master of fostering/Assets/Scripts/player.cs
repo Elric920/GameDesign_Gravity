@@ -18,8 +18,6 @@ public class player : MonoBehaviour {
     //记录小球碰撞的物体类型：[0]稳定石、[1]半稳定石、[2]不稳定石
     private int[] collisionType = {0,0,0};
     
-
-
     //小球弹跳相关变量
     public float maxForce=500f;
     public float minForce = 400f;
@@ -38,6 +36,23 @@ public class player : MonoBehaviour {
     public float forceCompensation=1f;
     public bool forceCompensationOpen = false;//是否修正弹射力
 
+    //小球在半稳定石上的运动修正
+    public semiStone semiS0;//用于场景中的“semiStone0”
+    public semiStone semiS1;//用于场景中的“semiStone1”
+    private string semiName = null;//记录小球和半稳定石碰撞后，半稳定石在场景中的名称
+    Vector3 playerP = new Vector3(0, 0, 0);//记录小球修正后的位置
+    private int runMovementModify = 0;//是否修正小球的运动:0不修正，1修正小球在半稳定石semiStone0上的运动
+    private Vector3 semiP = new Vector3(0, 0, 0);//记录碰撞发生时，半稳定石的位置
+    /******************************************************
+     * 半稳定石运动修正
+     * 1在小球和半稳定石发生碰撞时触发对于小球与半稳定石相对位置的检测
+     * 2如果小球在半稳定石上，且未发生弹跳则执行小球在半稳定石上的运动修正
+     * 3在弹跳前瞬间解除小球的运动修正
+     * 
+     * ****************************************************/
+
+
+
 
     void Start()
     {
@@ -53,7 +68,6 @@ public class player : MonoBehaviour {
     {
         Turning();
         TestMouseButton0();  //检测鼠标左键输入
-
 
         //Matthew 11.28 13:19
         /* if(Input.GetKeyDown(KeyCode.Space))
@@ -77,6 +91,7 @@ public class player : MonoBehaviour {
             }
         }
 
+        if (runMovementModify !=0) SemiMoveModify();
     }
 
     void Turning()//小球的转向函数
@@ -99,6 +114,9 @@ public class player : MonoBehaviour {
         else if (collision.tag == "semiStableStone")
         {
             collisionType[1] = 1;
+            semiP = collision.transform.position;//碰撞发生后，记录半稳定石位置
+            semiName = collision.name;//碰撞发生后，记录半稳定石在场景中的名称
+            positionDetection();//小球和半稳定石碰撞后触发对于二者相对位置的检测
         }
             
         else if (collision.tag == "nonStableStone")
@@ -146,6 +164,7 @@ public class player : MonoBehaviour {
         }
         if (collisionType[1] == 1)//小球碰到了半稳定石 20201130Du
         {
+            runMovementModify = 0;//在弹跳之前取消小球在半稳定石上的运动修正
             rb2d.AddForce(-transform.up * force);//暂定与稳定石运动规律相同  20201130Du
         }
     }
@@ -185,8 +204,37 @@ public class player : MonoBehaviour {
         if (forceCompensationOpen == true) F *= k;
         return F; 
     }
+
+    private void positionDetection()//小球和半稳定石碰撞触发的二者相对位置检测
+    {
+       // print(this.transform.position.y - semiP.y);
+        if (semiName == "semiStone0")//如果碰到了半稳定石“semiStone0” 
+            if ((this.transform.position.y - semiP.y) < 2.2)//判断小球是否在半稳定石上
+                if (-3.9 <(this.transform.position.x - semiP.x) && (this.transform.position.x - semiP.x) < 3.9)
+                    runMovementModify = 1;//小球在半稳定石semiStone0上，将运动修正置1 
+        if (semiName == "semiStone1")//如果碰到了半稳定石“semiStone1” 
+                                     // print(this.transform.position.y - semiP.y);
+            if ((this.transform.position.y - semiP.y) < 3.1)//判断小球是否在半稳定石上
+                if (-5.05 < (this.transform.position.x - semiP.x) && (this.transform.position.x - semiP.x) < 5.05)
+                    runMovementModify = 2;//小球在半稳定石semiStone1上，将运动修正置2
+    }
+
+    private void SemiMoveModify()//小球在半稳定石上的运动修正
+    {
+        if (runMovementModify == 1)//执行小球在半稳定石semiStone0上的运动修正
+        {
+            this.rb2d.velocity = semiS0.SemiStoneVelocity();
     
-    
+        }
+        if (runMovementModify == 2)//执行小球在半稳定石semiStone1上的运动修正
+        {
+            this.rb2d.velocity = semiS1.SemiStoneVelocity();
+        
+        }
+
+
+    }
+
 
     public Vector3 ShootAngle
     {

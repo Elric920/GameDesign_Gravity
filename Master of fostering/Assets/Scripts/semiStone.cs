@@ -2,18 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/**********************************
- * 半稳定石运动规律
- * 1 向上匀加速到semiV
- * 2 向上匀速运动指定距离
- * 3 向上匀减速到0
- * 4 向下匀加速到semiV
- * 5 向下匀速运动指定距离
- * 6 向下匀减速到0
- * 7 循环
- * 
- * 
- * *******************************/
+
 
 
 
@@ -43,7 +32,8 @@ public class semiStone : MonoBehaviour
     //控制半稳定石速度
     private Vector2 presentVelocity = new Vector2(0f, 0f);//记录半稳定石当前的速度
 
-
+    //用于把小球粘在半稳定石上
+    private Vector2 semiStoneVelovity = new Vector2 (0, 0);//记录半稳定石速度，供player脚本使用 
 
     // Start is called before the first frame update
     void Start()
@@ -71,6 +61,8 @@ public class semiStone : MonoBehaviour
             SemiStoneMove_Horizontal();//半稳定石竖直运动
 
         }
+
+        semiStoneVelovity = rb2D.velocity;//记录半稳定石速度，供player脚本调用
 
     }
 
@@ -185,6 +177,15 @@ public class semiStone : MonoBehaviour
             // print("匀速向左");
         }
 
+    }
+
+    public Vector2 SemiStoneVelocity()//用于供player脚本调用
+    {
+        return semiStoneVelovity;
+    }
+    public bool SemiStoneType()
+    {
+        return moveDirectionIsUpright;
     }
 }
 
