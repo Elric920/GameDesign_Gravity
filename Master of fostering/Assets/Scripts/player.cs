@@ -34,7 +34,9 @@ public class player : MonoBehaviour {
     float m_PressDuringTime;
     AudioSource audioSource;
 
-
+    //小球弹跳力量修正相关
+    public float forceCompensation=1f;
+    public bool forceCompensationOpen = false;//是否修正弹射力
 
 
     void Start()
@@ -174,7 +176,14 @@ public class player : MonoBehaviour {
 
     float ForceValue(float delT,float maxF,float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
     {
-         return ((maxF-minF)/0.9f) * (delT-1) + maxF;//呈线性变化
+        float k = 0f;//小球弹射力的修正系数
+        float F = ((maxF - minF) / 0.9f) * (delT - 1) + maxF;//修正前的力，线性变化结果
+        float a = -players.transform.up.x;//小球弹射方向向量的水平分量
+
+        //开口向下的抛物线修正倍率，forceCompensation(大于1)控制抛物线顶点位置，
+        k = (float)(a * a + forceCompensation * (1 - a * a));
+        if (forceCompensationOpen == true) F *= k;
+        return F; 
     }
     
     
