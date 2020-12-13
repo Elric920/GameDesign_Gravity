@@ -13,6 +13,7 @@ public class player : MonoBehaviour {
     private Animator playerAni;
     private int addingID = Animator.StringToHash("isAdding");
     public UnityEngine.Experimental.Rendering.Universal.Light2D lightOnLand;
+    private ParticleSystem hatParticle;
 
     //小球状态相关变量
     //记录小球碰撞的物体类型：[0]稳定石、[1]半稳定石、[2]不稳定石
@@ -47,6 +48,7 @@ public class player : MonoBehaviour {
         m_PressDuringTime = 0.0f;
         playerAni = this.GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        hatParticle = this.GetComponent<ParticleSystem>();
     }
 
     void Update()
@@ -171,6 +173,7 @@ public class player : MonoBehaviour {
             m_PressDuringTime = 0;
             playerAni.SetBool(addingID,false);
             audioSource.Stop();
+            hatParticle.Play();
         }
     }
 
