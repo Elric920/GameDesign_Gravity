@@ -63,7 +63,7 @@ public class player : MonoBehaviour {
         m_PressDuringTime = 0.0f;
         playerAni = this.GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        balltail = this.GetComponent<ParticleSystem>();
+        balltail = GetComponent<ParticleSystem>();
     }
 
     void Update()
