@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\DoorController.cs" />
     <Compile Include="Assets\Scripts\LiftUp.cs" />
     <Compile Include="Assets\Scripts\LinkChain.cs" />
+    <Compile Include="Assets\Scripts\PerlinNoise.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\SavePointMap.cs" />
     <Compile Include="Assets\Scripts\SavingSystem.cs" />
