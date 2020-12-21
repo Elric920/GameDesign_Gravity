@@ -5,7 +5,7 @@ using UnityEngine;
 public class AttachPlayer : MonoBehaviour
 {
     GameObject player;
-    public float definedLockTime = 0.01f;
+    public float definedLockTime = 0.005f;
     bool locked;
     float lockTime;
 

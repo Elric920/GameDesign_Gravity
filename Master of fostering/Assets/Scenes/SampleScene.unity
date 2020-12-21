@@ -5163,12 +5163,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd9a54109e3cee41a3fbaac27ac62df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDirectionIsUpright: 0
+  moveDirectionIsUpright: 1
   semiUpVelocity: 0
   semiDownVelocity: 0
-  semiLeftVelocity: 20
-  semiRightVelocity: 20
-  movementDistance: 60
+  semiLeftVelocity: 0
+  semiRightVelocity: 0
+  movementDistance: 0
 --- !u!50 &359038198
 Rigidbody2D:
   serializedVersion: 4
@@ -11613,7 +11613,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.026233109, y: 0.7621112}
-  m_Size: {x: 9.44814, y: 1.0751818}
+  m_Size: {x: 9.448142, y: 1.0751818}
   m_Direction: 1
 --- !u!114 &975679480
 MonoBehaviour:
@@ -11627,7 +11627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d2f602ba4bce9f40ac397efee035148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  definedLockTime: 0.05
+  definedLockTime: 0.01
 --- !u!4 &1108390884 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4746023321297426295, guid: 09ff0c14c669bab49b324b5bce067b6b,
@@ -29839,12 +29839,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd9a54109e3cee41a3fbaac27ac62df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDirectionIsUpright: 0
+  moveDirectionIsUpright: 1
   semiUpVelocity: 0
   semiDownVelocity: 0
-  semiLeftVelocity: 20
-  semiRightVelocity: 20
-  movementDistance: 40
+  semiLeftVelocity: 0
+  semiRightVelocity: 0
+  movementDistance: 0
 --- !u!50 &1459971114
 Rigidbody2D:
   serializedVersion: 4
