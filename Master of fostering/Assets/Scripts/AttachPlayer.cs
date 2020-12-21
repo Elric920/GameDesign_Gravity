@@ -33,13 +33,12 @@ public class AttachPlayer : MonoBehaviour
         player.transform.parent = this.transform;   //通过子对象实现的
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
         if(locked) return;
         if(other.transform == player.transform)
         {
             BuildAttachment();
-            Debug.Log("Attachment build!");
         }
     }
 
