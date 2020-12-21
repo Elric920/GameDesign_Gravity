@@ -12,7 +12,9 @@ public class player : MonoBehaviour {
     private Rigidbody2D rb2d;
     private Animator playerAni;
     private int addingID = Animator.StringToHash("isAdding");
+    private int fullID = Animator.StringToHash("isFull");
     public UnityEngine.Experimental.Rendering.Universal.Light2D lightOnLand;
+    private ParticleSystem balltail;
 
     //小球状态相关变量
     //记录小球碰撞的物体类型：[0]稳定石、[1]半稳定石、[2]不稳定石
@@ -62,6 +64,7 @@ public class player : MonoBehaviour {
         m_PressDuringTime = 0.0f;
         playerAni = this.GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        balltail = GetComponent<ParticleSystem>();
     }
 
     void Update()
@@ -175,21 +178,31 @@ public class player : MonoBehaviour {
         {
            if(!audioSource.isPlaying) audioSource.Play();
            m_PressDuringTime += Time.deltaTime;
+           playerAni.SetBool(addingID, true);
            UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
-            playerAni.SetBool(addingID,true);
-           return;
+
+           if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限
+            {
+                playerAni.SetBool(addingID, false);
+                playerAni.SetBool(fullID, true);
+            }
+                return;
         }
         if (Input.GetMouseButtonUp(0))
         {
             if (m_PressDuringTime > 0.01 && m_PressDuringTime < 0.1)//如果按下鼠标的时间过短，则认为按下了0.1s
             m_PressDuringTime = 0.1f;
             if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限，则置为最大时限
-            m_PressDuringTime = maxPressTime;
+            {
+                m_PressDuringTime = maxPressTime;
+            }
             Jumping(ForceValue(m_PressDuringTime, maxForce, minForce));
             UISystem.instance.ReleaseEnergy();
             m_PressDuringTime = 0;
-            playerAni.SetBool(addingID,false);
+            playerAni.SetBool(addingID, false);
+            playerAni.SetBool(fullID, false);
             audioSource.Stop();
+            balltail.Play();
         }
     }
 
