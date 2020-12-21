@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 
-public class semiStone : MonoBehaviour
+public class SemiStone : MonoBehaviour
 {
     private Transform semiStoneTrans; //半稳定石的位置 
     private Rigidbody2D rb2D;//半稳定石的rb2D组件
@@ -35,12 +35,12 @@ public class semiStone : MonoBehaviour
     //用于把小球粘在半稳定石上
     private Vector2 semiStoneVelovity = new Vector2 (0, 0);//记录半稳定石速度，供player脚本使用 
 
+    GameObject player;
     // Start is called before the first frame update
     void Start()
     {
         semiStoneTrans = this.GetComponent<Transform>();
         rb2D = this.GetComponent<Rigidbody2D>();
-
         semiP0 = semiStoneTrans.position;//游戏开始，记录半稳定石位置
 
     }
@@ -179,14 +179,6 @@ public class semiStone : MonoBehaviour
 
     }
 
-    public Vector2 SemiStoneVelocity()//用于供player脚本调用
-    {
-        return semiStoneVelovity;
-    }
-    public bool SemiStoneType()
-    {
-        return moveDirectionIsUpright;
-    }
 }
 
 
