@@ -46,13 +46,13 @@
      <Compile Include="Assets\Scripts\LiftUp.cs" />
      <Compile Include="Assets\Scripts\LinkChain.cs" />
      <Compile Include="Assets\Scripts\PerlinNoise.cs" />
+     <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\SavePointMap.cs" />
      <Compile Include="Assets\Scripts\SavingSystem.cs" />
+     <Compile Include="Assets\Scripts\SemiStone.cs" />
      <Compile Include="Assets\Scripts\UISystem.cs" />
      <Compile Include="Assets\Scripts\move.cs" />
-     <Compile Include="Assets\Scripts\player.cs" />
-     <Compile Include="Assets\Scripts\semiStone.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
