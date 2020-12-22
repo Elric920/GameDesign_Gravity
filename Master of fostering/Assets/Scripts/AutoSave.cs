@@ -6,7 +6,7 @@ public class AutoSave : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D other)
     {
-        player player = other.GetComponent<player>();
+        Player player = other.GetComponent<Player>();
         if(player != null)
         {
             SavingSystem.instance.Save(name, transform.position);
