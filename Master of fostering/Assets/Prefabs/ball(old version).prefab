@@ -136,12 +136,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f66c2d1bf6267646a74a4020067d433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players: {fileID: 0}
+  lightOnLand: {fileID: 0}
   maxForce: 1500
   minForce: 500
   maxPressTime: 1
-  floatObject: {fileID: 0}
-  doorToNextLevel: {fileID: 0}
+  forceCompensation: 1
+  forceCompensationOpen: 0
 --- !u!58 &1131846586
 CircleCollider2D:
   m_ObjectHideFlags: 0
