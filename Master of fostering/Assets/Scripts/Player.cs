@@ -32,8 +32,7 @@ public class Player : MonoBehaviour {
     float m_PressDuringTime;
     bool m_BlockMouseButton0;  //定义了当前充能状态是否已经被玩家点击鼠标右键而终止
     bool m_FastChargingEnergy;  //定义了当前的状态是否是可以快速充能的
-    AudioSource audioSource;
-
+    
     //小球弹跳力量修正相关
     public float forceCompensation=1f;
     public bool forceCompensationOpen = false;//是否修正弹射力
@@ -45,7 +44,6 @@ public class Player : MonoBehaviour {
         rb2d=this.GetComponent<Rigidbody2D>();
         m_PressDuringTime = 0.0f;
         playerAni = this.GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
         balltail = GetComponent<ParticleSystem>();
         m_BlockMouseButton0 = false;
         m_FastChargingEnergy = false;
@@ -118,6 +116,7 @@ public class Player : MonoBehaviour {
         {
             rb2d.AddForce(-transform.up * force);//暂定与稳定石运动规律相同  20201130Du
         }
+        AudioManager.instance.Play("AddingForceShoot");
     }
 
     void TestMouseButton()//检测鼠标在允许小球弹跳的情况下按下的时间以及右键取消
@@ -126,7 +125,8 @@ public class Player : MonoBehaviour {
         {
             if(Input.GetMouseButtonDown(1))
             {
-                audioSource.Stop();
+                AudioManager.instance.Stop("AddingForceUnfinished");
+                AudioManager.instance.Stop("AddingForceFinished");
                 m_PressDuringTime = 0;
                 //是否需要加入停止动画？？
                 playerAni.SetBool(addingID, false);
@@ -138,7 +138,7 @@ public class Player : MonoBehaviour {
            {
                m_PressDuringTime = maxPressTime;
            }
-           if(!audioSource.isPlaying) audioSource.Play();
+           
            m_PressDuringTime += Time.deltaTime;
            playerAni.SetBool(addingID, true);
            UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
@@ -147,8 +147,16 @@ public class Player : MonoBehaviour {
             {
                 playerAni.SetBool(addingID, false);
                 playerAni.SetBool(fullID, true);
+                if(!AudioManager.instance.isPlaying("AddingForceFinished"))
+                AudioManager.instance.Play("AddingForceFinished");
+
             }
-                return;
+            else
+            {
+                if(!AudioManager.instance.isPlaying("AddingForceUnfinished"))
+                AudioManager.instance.Play("AddingForceUnfinished");
+            }
+            return;
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -168,7 +176,8 @@ public class Player : MonoBehaviour {
             m_PressDuringTime = 0;
             playerAni.SetBool(addingID, false);
             playerAni.SetBool(fullID, false);
-            audioSource.Stop();
+            AudioManager.instance.Stop("AddingForceUnfinished");
+            AudioManager.instance.Stop("AddingForceFinished");
             balltail.Play();
         }
     }

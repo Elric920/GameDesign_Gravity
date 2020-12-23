@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\AttachPlayer.cs" />
+     <Compile Include="Assets\Scripts\AudioManager.cs" />
      <Compile Include="Assets\Scripts\AutoSave.cs" />
      <Compile Include="Assets\Scripts\CollectEnvelope.cs" />
      <Compile Include="Assets\Scripts\CollectKey.cs" />
@@ -52,6 +53,7 @@
      <Compile Include="Assets\Scripts\SavePointMap.cs" />
      <Compile Include="Assets\Scripts\SavingSystem.cs" />
      <Compile Include="Assets\Scripts\SemiStone.cs" />
+     <Compile Include="Assets\Scripts\Sound.cs" />
      <Compile Include="Assets\Scripts\UISystem.cs" />
      <Compile Include="Assets\Scripts\move.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
