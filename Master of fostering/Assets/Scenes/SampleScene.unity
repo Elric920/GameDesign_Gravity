@@ -5594,7 +5594,7 @@ MonoBehaviour:
   - name: AddingForceUnfinished
     clip: {fileID: 8300000, guid: 70633d91a92ac1d40a3a9a807a48fa66, type: 3}
     volumn: 1
-    pitch: 0.5
+    pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: AddingForceFinished
@@ -24992,12 +24992,22 @@ PrefabInstance:
     - target: {fileID: 5370313659558788331, guid: a212bc4ba30a6a644bc2c189999b40bd,
         type: 3}
       propertyPath: maxForce
-      value: 3000
+      value: 1555
       objectReference: {fileID: 0}
     - target: {fileID: 5370313659558788331, guid: a212bc4ba30a6a644bc2c189999b40bd,
         type: 3}
       propertyPath: forceCompensationOpen
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370313659558788331, guid: a212bc4ba30a6a644bc2c189999b40bd,
+        type: 3}
+      propertyPath: maxPressTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370313659558788331, guid: a212bc4ba30a6a644bc2c189999b40bd,
+        type: 3}
+      propertyPath: forceCompensation
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 5372340248074053792, guid: a212bc4ba30a6a644bc2c189999b40bd,
         type: 3}

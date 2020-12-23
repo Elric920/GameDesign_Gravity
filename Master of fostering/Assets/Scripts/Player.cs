@@ -24,6 +24,7 @@ public class Player : MonoBehaviour {
     public float minForce = 400f;
     [Tooltip("小球最长蓄力时长(单位为s)：")]
     public float maxPressTime = 1.0f;
+    private const float minPressTime = 0.1f;
     
     //MatthewChen's Code 12.21 13:17 v1.1
     //public GameObject doorToNextLevel;
@@ -183,10 +184,10 @@ public class Player : MonoBehaviour {
     }
 
 
-    float ForceValue(float delT,float maxF,float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
+    float ForceValue(float pressDuringTime,float maxF,float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
     {
         float k = 0f;//小球弹射力的修正系数
-        float F = ((maxF - minF) / 0.9f) * (delT - 1) + maxF;//修正前的力，线性变化结果
+        float F = ((maxF - minF) / (maxPressTime - minPressTime)) * (pressDuringTime - maxPressTime) + maxF;//修正前的力，线性变化结果
         float a = -transform.up.x;//小球弹射方向向量的水平分量
 
         //开口向下的抛物线修正倍率，forceCompensation(大于1)控制抛物线顶点位置，
