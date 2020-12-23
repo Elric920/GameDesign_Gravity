@@ -43,6 +43,7 @@
      <Compile Include="Assets\Scripts\DeathArea.cs" />
      <Compile Include="Assets\Scripts\DetectWall.cs" />
      <Compile Include="Assets\Scripts\DoorController.cs" />
+     <Compile Include="Assets\Scripts\FastChargingEnergy.cs" />
      <Compile Include="Assets\Scripts\LiftUp.cs" />
      <Compile Include="Assets\Scripts\LinkChain.cs" />
      <Compile Include="Assets\Scripts\PerlinNoise.cs" />

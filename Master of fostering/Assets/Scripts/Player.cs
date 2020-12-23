@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
     private bool[] collisionType = {false,false,false,false};
     
     //小球弹跳相关变量
-    public float maxForce=1500f;
+    public float maxForce=3000f;
     public float minForce = 400f;
     [Tooltip("小球最长蓄力时长(单位为s)：")]
     public float maxPressTime = 1.0f;
@@ -28,7 +28,10 @@ public class Player : MonoBehaviour {
     //MatthewChen's Code 12.21 13:17 v1.1
     //public GameObject doorToNextLevel;
     //MatthewChen's Code 11.28 23:30 v1.0
+    //MatthewChen 12.23
     float m_PressDuringTime;
+    bool m_BlockMouseButton0;  //定义了当前充能状态是否已经被玩家点击鼠标右键而终止
+    bool m_FastChargingEnergy;  //定义了当前的状态是否是可以快速充能的
     AudioSource audioSource;
 
     //小球弹跳力量修正相关
@@ -44,12 +47,14 @@ public class Player : MonoBehaviour {
         playerAni = this.GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         balltail = GetComponent<ParticleSystem>();
+        m_BlockMouseButton0 = false;
+        m_FastChargingEnergy = false;
     }
 
     void Update()
     {
         Turning();
-        TestMouseButton0();  //检测鼠标左键输入
+        TestMouseButton();  //检测鼠标左键输入
 
         //Matthew 11.28 13:19
         /* if(Input.GetKeyDown(KeyCode.Space))
@@ -115,10 +120,24 @@ public class Player : MonoBehaviour {
         }
     }
 
-    void TestMouseButton0()//检测鼠标在允许小球弹跳的情况下按下的时间
+    void TestMouseButton()//检测鼠标在允许小球弹跳的情况下按下的时间以及右键取消
     {
-        if(Input.GetAxis("MouseButton0") > 10e-6)
+        if(!m_BlockMouseButton0 && Input.GetAxis("MouseButton0") > 10e-6)
         {
+            if(Input.GetMouseButtonDown(1))
+            {
+                audioSource.Stop();
+                m_PressDuringTime = 0;
+                //是否需要加入停止动画？？
+                playerAni.SetBool(addingID, false);
+                playerAni.SetBool(fullID, false);
+                m_BlockMouseButton0 = true;    //当按了鼠标右键后会封锁鼠标左键的输入
+                return;
+            }
+           if(m_FastChargingEnergy)  //如果允许快速充能则立马视为按压时间已到最高
+           {
+               m_PressDuringTime = maxPressTime;
+           }
            if(!audioSource.isPlaying) audioSource.Play();
            m_PressDuringTime += Time.deltaTime;
            playerAni.SetBool(addingID, true);
@@ -133,6 +152,11 @@ public class Player : MonoBehaviour {
         }
         if (Input.GetMouseButtonUp(0))
         {
+            if(m_BlockMouseButton0) 
+            {
+                m_BlockMouseButton0 = false;
+                return;
+            }
             if (m_PressDuringTime > 0.01 && m_PressDuringTime < 0.1)//如果按下鼠标的时间过短，则认为按下了0.1s
             m_PressDuringTime = 0.1f;
             if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限，则置为最大时限
@@ -148,6 +172,7 @@ public class Player : MonoBehaviour {
             balltail.Play();
         }
     }
+
 
     float ForceValue(float delT,float maxF,float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
     {
@@ -180,6 +205,16 @@ public class Player : MonoBehaviour {
         //可能要先播个动画？？
         rb2d.velocity = new Vector2(0.0f, 0.0f);
         transform.position = SavingSystem.instance.GetLatestSavePoint();
+    }
+
+    public void EnableFastChargingEnergy()
+    {
+        m_FastChargingEnergy = true;
+    }
+
+    public void DisableFastChargingEnergy()
+    {
+        m_FastChargingEnergy = false;
     }
 
 }
