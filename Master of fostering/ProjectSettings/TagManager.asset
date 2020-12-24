@@ -52,3 +52,6 @@ TagManager:
   - name: decorate
     uniqueID: 3317204213
     locked: 0
+  - name: selflight
+    uniqueID: 3076226997
+    locked: 0
