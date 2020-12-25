@@ -142,7 +142,7 @@ public class Player : MonoBehaviour {
            
            m_PressDuringTime += Time.deltaTime;
            playerAni.SetBool(addingID, true);
-           UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
+           //UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
 
            if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限
             {
@@ -173,7 +173,7 @@ public class Player : MonoBehaviour {
                 m_PressDuringTime = maxPressTime;
             }
             Jumping(ForceValue(m_PressDuringTime, maxForce, minForce));
-            UISystem.instance.ReleaseEnergy();
+            //UISystem.instance.ReleaseEnergy();
             m_PressDuringTime = 0;
             playerAni.SetBool(addingID, false);
             playerAni.SetBool(fullID, false);

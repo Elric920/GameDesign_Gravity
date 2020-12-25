@@ -17,7 +17,11 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         foreach (Sound sound in sounds)
         {
-            sound.source = gameObject.AddComponent<AudioSource>();
+            if(sound.isObjectWithAudioSource)
+            {
+                sound.source = GameObject.Find(sound.objectName).AddComponent<AudioSource>();
+            }
+            else sound.source = gameObject.AddComponent<AudioSource>();
             sound.source.clip = sound.clip;
             sound.source.volume = sound.volumn;
             sound.source.pitch = sound.pitch;

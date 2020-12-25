@@ -1,22 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UISystem : MonoBehaviour
 {
     public static UISystem instance {get; private set;}
-    public UnityEngine.UI.Text envelopesText;
-    public UnityEngine.UI.Text keysText;
+    public TMP_Text keysText;
+    
     public UnityEngine.UI.Image mask;
     int m_KeyNums;
-    int m_EnvelopeNums;
     public int maxKeys = 0; 
-    [Tooltip("Explains how the Energy decrease pre frame.")]
-    public float attenuatePerFrame = 0.1f;
+    //[Tooltip("Explains how the Energy decrease pre frame.")]
+    //public float attenuatePerFrame = 0.1f;
 
-    float m_OriginalSize;
-    float m_Value;
-    bool m_ReleaseMark = false;
+    //float m_OriginalSize;
+    //float m_Value;
+    //bool m_ReleaseMark = false;
 
     void Awake()
     {
@@ -26,14 +26,13 @@ public class UISystem : MonoBehaviour
     void Start()
     {
         m_KeyNums = 0;
-        m_EnvelopeNums = 0;
-        keysText.text = "0/" + maxKeys;   
-        m_OriginalSize = mask.rectTransform.rect.width;
+        keysText.text = "00";   
+        //m_OriginalSize = mask.rectTransform.rect.width;
     }
 
     void Update()
     {
-        if(m_ReleaseMark)
+        /* if(m_ReleaseMark)
         {
             m_Value -= attenuatePerFrame;
             if(m_Value < 0)
@@ -42,19 +41,20 @@ public class UISystem : MonoBehaviour
                 m_ReleaseMark = false;
             }
             ChangeSize();
-        }
+        } */
     }
     public void AddKey()
     {
         m_KeyNums += 1;
-        keysText.text = m_KeyNums + "/"+ maxKeys; 
+        if(m_KeyNums < 10) keysText.text = "0" + m_KeyNums;
+        else keysText.text = m_KeyNums.ToString(); 
     }
 
-    public void AddEnvelope()
+    /* public void AddEnvelope()
     {
         m_EnvelopeNums += 1;
         envelopesText.text = m_EnvelopeNums.ToString();
-    }
+    } */
 
     public bool GetIfCollectedAllKeys()
     {
@@ -62,20 +62,20 @@ public class UISystem : MonoBehaviour
         else return false;
     }
 
-    public void SetValue(float value)
+    /* public void SetValue(float value)
     {
         m_ReleaseMark = false;
         m_Value = value;
         ChangeSize();
-    }
+    } */
 
-    public void ReleaseEnergy()
+    /* public void ReleaseEnergy()
     {
         m_ReleaseMark = true;
     }
-
-    void ChangeSize()
+ */
+    /* void ChangeSize()
     {
         mask.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, m_Value * m_OriginalSize);
-    }
+    } */
 }

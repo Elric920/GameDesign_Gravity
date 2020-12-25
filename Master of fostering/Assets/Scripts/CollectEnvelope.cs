@@ -10,7 +10,7 @@ public class CollectEnvelope : MonoBehaviour
     {
         if(other.transform == player)
         {
-            UISystem.instance.AddEnvelope();
+            //UISystem.instance.AddEnvelope();
             //播放音效
             //播放动画
             Destroy(gameObject);
