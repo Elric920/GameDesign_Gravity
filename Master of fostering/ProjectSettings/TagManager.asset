@@ -49,6 +49,9 @@ TagManager:
   - name: Background
     uniqueID: 2519815877
     locked: 0
+  - name: houjing
+    uniqueID: 4210191257
+    locked: 0
   - name: decorate
     uniqueID: 3317204213
     locked: 0
