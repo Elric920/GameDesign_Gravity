@@ -56,10 +56,16 @@ public class UISystem : MonoBehaviour
         envelopesText.text = m_EnvelopeNums.ToString();
     } */
 
-    public bool GetIfCollectedAllKeys()
+    public int GetKeyNumber()
     {
-        if (m_KeyNums == maxKeys) return true;
-        else return false;
+        return m_KeyNums;
+    }
+
+    public void decreaseKey(int num)
+    {
+        m_KeyNums -= num;
+        if(m_KeyNums < 10) keysText.text = "0" + m_KeyNums;
+        else keysText.text = m_KeyNums.ToString(); 
     }
 
     /* public void SetValue(float value)

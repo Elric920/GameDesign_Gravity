@@ -43,15 +43,15 @@ public class SavingSystem: MonoBehaviour
     {
         Vector2 restartPosition = m_SaveChain.GetLatestSavePoint();
         restartPosition.y += RestartBias;
-        Debug.Log("读档：" + restartPosition);
+        //Debug.Log("读档：" + restartPosition);
         return restartPosition;
     }
 
     public void Save(string savePointName, Vector2 vector)
     {
-        Debug.Log("Save!!!");
+        //Debug.Log("Save!!!");
         bool savePossibility = m_SaveChain.AddLatestSavePoint(savePointName, vector);
-        Debug.Log("SavePossibility:"+savePossibility);
+        //Debug.Log("SavePossibility:"+savePossibility);
     }
 }
 

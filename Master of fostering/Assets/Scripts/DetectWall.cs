@@ -30,6 +30,7 @@ public class DetectWall : MonoBehaviour
         else if(other.tag == "door")
         {
             player.SetCollisionTag(3, true);
+            player.SetNearestDoorController(other.GetComponent<DoorController>());
         }
     }
 
@@ -53,6 +54,7 @@ public class DetectWall : MonoBehaviour
         else if(other.tag == "door")
         {
             player.SetCollisionTag(3,  false, false);
+            player.SetNearestDoorController(null);
         }
     }
 }

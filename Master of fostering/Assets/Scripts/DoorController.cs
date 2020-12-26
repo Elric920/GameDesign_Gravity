@@ -4,39 +4,17 @@ using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
-    public float displayTime = 4.0f;
-    public GameObject dialogBox;
-    float timerDisplay;
-    // Start is called before the first frame update
-    void Start()
+    public GameObject SkillCanvas;
+
+    public void EnableCanvas()
     {
-        dialogBox.SetActive(false);
-        timerDisplay = -1.0f;
+        SkillCanvas.SetActive(true);
+        GameManagement.instance.Pause(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DisableCanvas()
     {
-        if(timerDisplay >= 0)
-        {
-            timerDisplay -= Time.deltaTime;
-            if(timerDisplay < 0)
-            {
-            dialogBox.SetActive(false);
-            }
-        }
-    }
-
-    public void DisplayDialog()
-    {
-        if(UISystem.instance.GetIfCollectedAllKeys())
-        {
-            Debug.Log("闯关成功！");
-        }
-        else
-        {
-            dialogBox.SetActive(true);
-            timerDisplay = displayTime;
-        }   
+        SkillCanvas.SetActive(false);
+        GameManagement.instance.Resume(true);
     }
 }

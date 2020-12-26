@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 5370313659558788329}
   - component: {fileID: 5370313659558788328}
   - component: {fileID: 5370313659558788331}
+  - component: {fileID: 3683467356413575642}
   - component: {fileID: 5370313659558788330}
   - component: {fileID: 5370313659558788325}
   - component: {fileID: 5370313659558788324}
@@ -235,7 +236,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5370313659558788326}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 45.7, y: 48.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -344,14 +345,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f66c2d1bf6267646a74a4020067d433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players: {fileID: 0}
-  lightOnLand: {fileID: 0}
-  maxForce: 500
+  lightOnLand: {fileID: 5368654608546611356}
+  maxForce: 1555
   minForce: 400
-  maxPressTime: 1
-  doorToNextLevel: {fileID: 0}
-  forceCompensation: 1
-  forceCompensationOpen: 0
+  maxPressTime: 0.5
+  forceCompensation: 1.4
+  forceCompensationOpen: 1
+--- !u!114 &3683467356413575642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370313659558788326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a597206963ad8b408538b63fa157418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockTime: 1
+  colorDuringTime: 0.1
+  colorArray:
+  - {r: 0.9433962, g: 0.06674972, b: 0.06674972, a: 0.8156863}
+  - {r: 1, g: 0.99501103, b: 0, a: 0.8156863}
+  - {r: 0, g: 0.9898968, b: 1, a: 0.80784315}
+  - {r: 1, g: 0, b: 0.804821, a: 0.8509804}
+  - {r: 0, g: 0.08817577, b: 1, a: 0.8352941}
 --- !u!82 &5370313659558788330
 AudioSource:
   m_ObjectHideFlags: 0

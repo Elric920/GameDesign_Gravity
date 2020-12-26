@@ -33,11 +33,18 @@ public class Player : MonoBehaviour {
     float m_PressDuringTime;
     bool m_BlockMouseButton0;  //定义了当前充能状态是否已经被玩家点击鼠标右键而终止
     bool m_FastChargingEnergy;  //定义了当前的状态是否是可以快速充能的
+    DoorController m_NearestDoorController;
+    bool m_JumpTwiceSkill;
+    bool m_JumpTwiceAvailable;
     
     //小球弹跳力量修正相关
     public float forceCompensation=1f;
     public bool forceCompensationOpen = false;//是否修正弹射力
 
+    void Awake()
+    {
+        GameManagement.isGamePaused = false;       
+    }
 
     void Start()
     {
@@ -48,12 +55,16 @@ public class Player : MonoBehaviour {
         balltail = GetComponent<ParticleSystem>();
         m_BlockMouseButton0 = false;
         m_FastChargingEnergy = false;
+        m_JumpTwiceSkill = false;
     }
 
     void Update()
     {
+        TestEscInput();
+        if(GameManagement.isGamePaused) return;    
         Turning();
         TestMouseButton();  //检测鼠标左键输入
+        TestKeyBoardsInput();
 
         //Matthew 11.28 13:19
         /* if(Input.GetKeyDown(KeyCode.Space))
@@ -64,18 +75,7 @@ public class Player : MonoBehaviour {
         //12.8禁用Lift模块
 
         //Matthew 11.28 23:30
-        /* if(Input.GetKeyDown(KeyCode.Z))
-        {
-            if(collisionType[3]) 
-            {
-                DoorController doorController = doorToNextLevel.GetComponent<DoorController>();
-                if(doorController != null)
-                {
-                    doorController.DisplayDialog();
-                }
-                else Debug.Log("Door Detected but there is no right script attached to it.");
-            }
-        } */
+        /* */
     }
 
     void Turning()//小球的转向函数
@@ -112,10 +112,17 @@ public class Player : MonoBehaviour {
         if (collisionType[0])//小球碰到了稳定石
         {
             rb2d.AddForce(-transform.up * force);
+            m_JumpTwiceAvailable = true;
         }
-        if (collisionType[1])//小球碰到了半稳定石 20201130Du
+        else if (collisionType[1])//小球碰到了半稳定石 20201130Du
         {
             rb2d.AddForce(-transform.up * force);//暂定与稳定石运动规律相同  20201130Du
+            m_JumpTwiceAvailable = true;   //说明此时玩家已从一个之前可以起跳的平台起跳了，则二段跳的技能槽重新计算
+        }
+        else if (m_JumpTwiceSkill && m_JumpTwiceAvailable)
+        {
+            rb2d.AddForce(-transform.up * force);   //如果在空中是学了二段跳的就跳
+            m_JumpTwiceAvailable = false;
         }
         AudioManager.instance.Play("AddingForceShoot");
     }
@@ -183,6 +190,27 @@ public class Player : MonoBehaviour {
         }
     }
 
+    void TestKeyBoardsInput()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            if(collisionType[3] && !GameManagement.isGamePaused) 
+            {
+                m_NearestDoorController.EnableCanvas();
+                //展示技能树界面
+            }
+        } 
+    }
+
+    void TestEscInput()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            if(GameManagement.isGamePaused) GameManagement.instance.Resume();
+            else GameManagement.instance.Pause();
+        }
+    }
+
 
     float ForceValue(float pressDuringTime,float maxF,float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
     {
@@ -225,6 +253,17 @@ public class Player : MonoBehaviour {
     public void DisableFastChargingEnergy()
     {
         m_FastChargingEnergy = false;
+    }
+
+    public void SetNearestDoorController(DoorController controller)
+    {
+        m_NearestDoorController = controller;
+    }
+
+    public void SetJumpTwice(bool value)
+    {
+        m_JumpTwiceSkill = value;
+        Debug.Log("Skill Learned;");
     }
 
 }
