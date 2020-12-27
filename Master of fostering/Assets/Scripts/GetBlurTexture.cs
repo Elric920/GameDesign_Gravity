@@ -10,6 +10,7 @@ public class GetBlurTexture : MonoBehaviour
     // Start is called before the first frame update
     public void GetBlurMaterial()
     {
+        
         if(blurCamera.targetTexture != null)
         {
             blurCamera.targetTexture.Release();

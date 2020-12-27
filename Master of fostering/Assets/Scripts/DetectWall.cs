@@ -5,6 +5,7 @@ using UnityEngine;
 public class DetectWall : MonoBehaviour
 {
     Player player;
+    public GameObject tipsMenu;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +32,7 @@ public class DetectWall : MonoBehaviour
         {
             player.SetCollisionTag(3, true);
             player.SetNearestDoorController(other.GetComponent<DoorController>());
+            tipsMenu.SetActive(true);
         }
     }
 
@@ -55,6 +57,7 @@ public class DetectWall : MonoBehaviour
         {
             player.SetCollisionTag(3,  false, false);
             player.SetNearestDoorController(null);
+            tipsMenu.SetActive(false);
         }
     }
 }

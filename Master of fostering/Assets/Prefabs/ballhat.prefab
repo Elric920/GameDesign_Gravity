@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 499d7b8f04be1da46b82da19a3af83e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tipsMenu: {fileID: 0}
 --- !u!1 &5370313659558788326
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,6 +346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f66c2d1bf6267646a74a4020067d433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  virtualCamera: {fileID: 0}
+  maxCameraSize: 30
   lightOnLand: {fileID: 5368654608546611356}
   maxForce: 1555
   minForce: 400

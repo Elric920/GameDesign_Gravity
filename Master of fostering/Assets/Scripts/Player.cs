@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.Rendering;
+using Cinemachine;
 
 public class Player : MonoBehaviour {
 
     Vector3 shootAngle;
     Camera cam;
+    public CinemachineVirtualCamera virtualCamera;
+    private float m_CameraSize;
+    public float maxCameraSize = 30.0f;
+    const float m_LockScaleCameraTime = 0.5f;
+    float m_VariableLockScaleCameraTime;
     private Rigidbody2D rb2d;
     private Animator playerAni;
     private int addingID = Animator.StringToHash("isAdding");
@@ -59,16 +65,23 @@ public class Player : MonoBehaviour {
         m_FastChargingEnergy = false;
         m_JumpTwiceSkill = true;
         m_LearnCavasShowing = false;
+        m_CameraSize = virtualCamera.m_Lens.OrthographicSize;
+        m_VariableLockScaleCameraTime = 0;
     }
 
     void Update()
     {
         TestEscInput();
-        if(GameManagement.isGamePaused) return;    
+        if(GameManagement.isGamePaused) return;
+        TestKeyBoardsInput();
+        if(m_VariableLockScaleCameraTime > 0) 
+        {
+            m_VariableLockScaleCameraTime -= Time.deltaTime;
+            return;
+        }
+        else m_VariableLockScaleCameraTime = 0;  
         Turning();
         TestMouseButton();  //检测鼠标左键输入
-        TestKeyBoardsInput();
-
         //Matthew 11.28 13:19
         /* if(Input.GetKeyDown(KeyCode.Space))
         {
@@ -209,6 +222,16 @@ public class Player : MonoBehaviour {
                 m_LearnCavasShowing = true;  //标记当前游戏已被技能学习界面暂停，无法再次Call技能学习
             }
         } 
+        if(Input.GetKey(KeyCode.M))
+        {
+            ScaleCameraLens();
+            m_VariableLockScaleCameraTime = m_LockScaleCameraTime;
+        }
+        else if(m_VariableLockScaleCameraTime <= 0)
+        {
+            //Decay
+            CameraLensDecay();
+        }
     }
 
     void TestEscInput()
@@ -285,6 +308,20 @@ public class Player : MonoBehaviour {
     public void SetSkillCanvas(SkillCanvas skillCanvas)
     {
         this.skillCanvas = skillCanvas;
+    }
+
+    void ScaleCameraLens()
+    {
+        if(virtualCamera.m_Lens.OrthographicSize < maxCameraSize)
+        virtualCamera.m_Lens.OrthographicSize += 0.1f;
+        else virtualCamera.m_Lens.OrthographicSize = maxCameraSize;
+    }
+
+    void CameraLensDecay()
+    {
+        if(virtualCamera.m_Lens.OrthographicSize <= m_CameraSize)
+        virtualCamera.m_Lens.OrthographicSize = m_CameraSize;
+        else virtualCamera.m_Lens.OrthographicSize -= 0.1f;
     }
 
 }
