@@ -17108,6 +17108,16 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 147505277}
+    - target: {fileID: 1083473878113145572, guid: ae532148e1fce0f42933bb6fa64b78a8,
+        type: 3}
+      propertyPath: requiredKeysNumber
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3835825325569887587, guid: ae532148e1fce0f42933bb6fa64b78a8,
+        type: 3}
+      propertyPath: m_Name
+      value: LearnSkillText
+      objectReference: {fileID: 0}
     - target: {fileID: 5071700086240554016, guid: ae532148e1fce0f42933bb6fa64b78a8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -17217,6 +17227,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SkillCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5071700086240554028, guid: ae532148e1fce0f42933bb6fa64b78a8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae532148e1fce0f42933bb6fa64b78a8, type: 3}

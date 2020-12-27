@@ -25,6 +25,7 @@ public class Player : MonoBehaviour {
     [Tooltip("小球最长蓄力时长(单位为s)：")]
     public float maxPressTime = 1.0f;
     private const float minPressTime = 0.1f;
+    SkillCanvas skillCanvas;
     
     //MatthewChen's Code 12.21 13:17 v1.1
     //public GameObject doorToNextLevel;
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour {
     DoorController m_NearestDoorController;
     bool m_JumpTwiceSkill;
     bool m_JumpTwiceAvailable;
+    bool m_LearnCavasShowing;
     
     //小球弹跳力量修正相关
     public float forceCompensation=1f;
@@ -56,6 +58,7 @@ public class Player : MonoBehaviour {
         m_BlockMouseButton0 = false;
         m_FastChargingEnergy = false;
         m_JumpTwiceSkill = false;
+        m_LearnCavasShowing = false;
     }
 
     void Update()
@@ -198,6 +201,7 @@ public class Player : MonoBehaviour {
             {
                 m_NearestDoorController.EnableCanvas();
                 //展示技能树界面
+                m_LearnCavasShowing = true;  //标记当前游戏已被技能学习界面暂停，无法再次Call技能学习
             }
         } 
     }
@@ -208,6 +212,13 @@ public class Player : MonoBehaviour {
         {
             if(GameManagement.isGamePaused) GameManagement.instance.Resume();
             else GameManagement.instance.Pause();
+            if(m_LearnCavasShowing)
+            {
+                if(skillCanvas == null)
+                {Debug.LogWarning("SkillCanvas is linked with null, but CanvasShowing variable is set to true.");}
+                m_LearnCavasShowing = true;
+                skillCanvas.Decline();
+            }
         }
     }
 
@@ -264,6 +275,11 @@ public class Player : MonoBehaviour {
     {
         m_JumpTwiceSkill = value;
         Debug.Log("Skill Learned;");
+    }
+
+    public void SetSkillCanvas(SkillCanvas skillCanvas)
+    {
+        this.skillCanvas = skillCanvas;
     }
 
 }
