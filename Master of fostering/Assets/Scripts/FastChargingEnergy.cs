@@ -9,6 +9,7 @@ public class FastChargingEnergy : MonoBehaviour
         Player player = other.GetComponent<Player>();
         if(player != null)
         player.EnableFastChargingEnergy();
+        Debug.Log("可以快速充能");
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -16,5 +17,6 @@ public class FastChargingEnergy : MonoBehaviour
         Player player = other.GetComponent<Player>();
         if(player != null)
         player.DisableFastChargingEnergy();
+        Debug.Log("禁用快速充能");
     }
 }

@@ -57,7 +57,7 @@ public class Player : MonoBehaviour {
         balltail = GetComponent<ParticleSystem>();
         m_BlockMouseButton0 = false;
         m_FastChargingEnergy = false;
-        m_JumpTwiceSkill = false;
+        m_JumpTwiceSkill = true;
         m_LearnCavasShowing = false;
     }
 
@@ -104,6 +104,11 @@ public class Player : MonoBehaviour {
 
     void Jumping(float force)//小球的弹跳函数
     {
+        if(m_FastChargingEnergy)
+        {
+            rb2d.velocity = new Vector2(0, 0);
+            m_JumpTwiceAvailable = true;
+        }
         if(transform.parent != null)
         {
             //小球在半浮力石上跳跃后，有一小段时间（默认是0.01s）不可再次被半浮力石变为子物体
