@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\FastChargingEnergy.cs" />
     <Compile Include="Assets\Scripts\GameManagement.cs" />
     <Compile Include="Assets\Scripts\GetBlurTexture.cs" />
+    <Compile Include="Assets\Scripts\KeepSameLens.cs" />
     <Compile Include="Assets\Scripts\LiftUp.cs" />
     <Compile Include="Assets\Scripts\LinkChain.cs" />
     <Compile Include="Assets\Scripts\LockDeath.cs" />

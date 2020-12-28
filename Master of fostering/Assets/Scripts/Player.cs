@@ -18,6 +18,7 @@ public class Player : MonoBehaviour {
     private Animator playerAni;
     private int addingID = Animator.StringToHash("isAdding");
     private int fullID = Animator.StringToHash("isFull");
+    private int quickChargeID = Animator.StringToHash("quickCharge");
     public UnityEngine.Experimental.Rendering.Universal.Light2D lightOnLand;
     private ParticleSystem balltail;
 
@@ -63,7 +64,7 @@ public class Player : MonoBehaviour {
         balltail = GetComponent<ParticleSystem>();
         m_BlockMouseButton0 = false;
         m_FastChargingEnergy = false;
-        m_JumpTwiceSkill = true;
+        m_JumpTwiceSkill = false;
         m_LearnCavasShowing = false;
         m_CameraSize = virtualCamera.m_Lens.OrthographicSize;
         m_VariableLockScaleCameraTime = 0;
@@ -166,13 +167,15 @@ public class Player : MonoBehaviour {
            if(m_FastChargingEnergy)  //如果允许快速充能则立马视为按压时间已到最高
            {
                m_PressDuringTime = maxPressTime;
-           }
+                playerAni.SetBool(quickChargeID, true);
+                Debug.Log("PlayFull");
+            }
            
            m_PressDuringTime += Time.deltaTime;
            playerAni.SetBool(addingID, true);
            //UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
 
-           if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限
+           if (m_PressDuringTime > maxPressTime|| m_PressDuringTime == maxPressTime)//如果按下鼠标的时间超过最大按压时限
             {
                 playerAni.SetBool(addingID, false);
                 playerAni.SetBool(fullID, true);
@@ -195,7 +198,10 @@ public class Player : MonoBehaviour {
                 return;
             }
             if (m_PressDuringTime > 0.01 && m_PressDuringTime < 0.1)//如果按下鼠标的时间过短，则认为按下了0.1s
-            m_PressDuringTime = 0.1f;
+            {
+                m_PressDuringTime = 0.1f;
+                
+            }
             if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限，则置为最大时限
             {
                 m_PressDuringTime = maxPressTime;
@@ -205,9 +211,10 @@ public class Player : MonoBehaviour {
             m_PressDuringTime = 0;
             playerAni.SetBool(addingID, false);
             playerAni.SetBool(fullID, false);
+            playerAni.SetBool(quickChargeID, false);
             AudioManager.instance.Stop("AddingForceUnfinished");
             AudioManager.instance.Stop("AddingForceFinished");
-            balltail.Play();
+
         }
     }
 
