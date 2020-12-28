@@ -5,7 +5,8 @@ using System.IO;
 using UnityEngine.Rendering;
 using Cinemachine;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
 
     Vector3 shootAngle;
     Camera cam;
@@ -18,22 +19,21 @@ public class Player : MonoBehaviour {
     private Animator playerAni;
     private int addingID = Animator.StringToHash("isAdding");
     private int fullID = Animator.StringToHash("isFull");
-    private int quickChargeID = Animator.StringToHash("quickCharge");
     public UnityEngine.Experimental.Rendering.Universal.Light2D lightOnLand;
     private ParticleSystem balltail;
 
     //小球状态相关变量
     //记录小球碰撞的物体类型：[0]稳定石、[1]半稳定石、[2]不稳定石、[3]闯关门
-    private bool[] collisionType = {false,false,false,false};
-    
+    private bool[] collisionType = { false, false, false, false };
+
     //小球弹跳相关变量
-    public float maxForce=3000f;
+    public float maxForce = 3000f;
     public float minForce = 400f;
     [Tooltip("小球最长蓄力时长(单位为s)：")]
     public float maxPressTime = 1.0f;
     private const float minPressTime = 0.1f;
     SkillCanvas skillCanvas;
-    
+
     //MatthewChen's Code 12.21 13:17 v1.1
     //public GameObject doorToNextLevel;
     //MatthewChen's Code 11.28 23:30 v1.0
@@ -41,24 +41,25 @@ public class Player : MonoBehaviour {
     float m_PressDuringTime;
     bool m_BlockMouseButton0;  //定义了当前充能状态是否已经被玩家点击鼠标右键而终止
     bool m_FastChargingEnergy;  //定义了当前的状态是否是可以快速充能的
+    bool m_LockedCompletely;
     DoorController m_NearestDoorController;
     bool m_JumpTwiceSkill;
     bool m_JumpTwiceAvailable;
     bool m_LearnCavasShowing;
-    
+
     //小球弹跳力量修正相关
-    public float forceCompensation=1f;
+    public float forceCompensation = 1f;
     public bool forceCompensationOpen = false;//是否修正弹射力
 
     void Awake()
     {
-        GameManagement.isGamePaused = false;       
+        GameManagement.isGamePaused = false;
     }
 
     void Start()
     {
-        cam = Camera.main; 
-        rb2d=this.GetComponent<Rigidbody2D>();
+        cam = Camera.main;
+        rb2d = this.GetComponent<Rigidbody2D>();
         m_PressDuringTime = 0.0f;
         playerAni = this.GetComponent<Animator>();
         balltail = GetComponent<ParticleSystem>();
@@ -68,27 +69,29 @@ public class Player : MonoBehaviour {
         m_LearnCavasShowing = false;
         m_CameraSize = virtualCamera.m_Lens.OrthographicSize;
         m_VariableLockScaleCameraTime = 0;
+        m_LockedCompletely = false;
     }
 
     void Update()
     {
+        if (m_LockedCompletely) return;
         TestEscInput();
-        if(GameManagement.isGamePaused) return;
+        if (GameManagement.isGamePaused) return;
         TestKeyBoardsInput();
-        if(m_VariableLockScaleCameraTime > 0) 
+        if (m_VariableLockScaleCameraTime > 0)
         {
             m_VariableLockScaleCameraTime -= Time.deltaTime;
             return;
         }
-        else m_VariableLockScaleCameraTime = 0;  
+        else m_VariableLockScaleCameraTime = 0;
         Turning();
         TestMouseButton();  //检测鼠标左键输入
-        //Matthew 11.28 13:19
+                            //Matthew 11.28 13:19
         /* if(Input.GetKeyDown(KeyCode.Space))
         {
             LiftUp liftUp = floatObject.GetComponent<LiftUp>();
             liftUp.StartLift();
-        } */  
+        } */
         //12.8禁用Lift模块
 
         //Matthew 11.28 23:30
@@ -105,25 +108,25 @@ public class Player : MonoBehaviour {
 
     public void SetCollisionTag(uint tagNumber, bool value, bool enter = true)
     {
-        if(enter) 
+        if (enter)
         {
-            lightOnLand.intensity = 0.3f;    
+            lightOnLand.intensity = 0.3f;
         }
         else
         {
             lightOnLand.intensity = 0.0f;
         }
-        collisionType[tagNumber] = value; 
+        collisionType[tagNumber] = value;
     }
 
     void Jumping(float force)//小球的弹跳函数
     {
-        if(m_FastChargingEnergy)
+        if (m_FastChargingEnergy)
         {
             rb2d.velocity = new Vector2(0, 0);
             m_JumpTwiceAvailable = true;
         }
-        if(transform.parent != null)
+        if (transform.parent != null)
         {
             //小球在半浮力石上跳跃后，有一小段时间（默认是0.01s）不可再次被半浮力石变为子物体
             AttachPlayer attachPlayer = GetComponentInParent<AttachPlayer>();
@@ -151,90 +154,96 @@ public class Player : MonoBehaviour {
 
     void TestMouseButton()//检测鼠标在允许小球弹跳的情况下按下的时间以及右键取消
     {
-        if(!m_BlockMouseButton0 && Input.GetAxis("MouseButton0") > 10e-6)
+        if (collisionType[0] || collisionType[1] || (m_JumpTwiceSkill && m_JumpTwiceAvailable))
         {
-            if(Input.GetMouseButtonDown(1))
+            if (!m_BlockMouseButton0 && Input.GetAxis("MouseButton0") > 10e-6)
             {
-                AudioManager.instance.Stop("AddingForceUnfinished");
-                AudioManager.instance.Stop("AddingForceFinished");
+                if (Input.GetMouseButtonDown(1))
+                {
+                    AudioManager.instance.Stop("AddingForceUnfinished");
+                    AudioManager.instance.Stop("AddingForceFinished");
+                    m_PressDuringTime = 0;
+                    //是否需要加入停止动画？？
+                    playerAni.SetBool(addingID, false);
+                    playerAni.SetBool(fullID, false);
+                    m_BlockMouseButton0 = true;    //当按了鼠标右键后会封锁鼠标左键的输入
+                    return;
+                }
+                if (m_FastChargingEnergy)  //如果允许快速充能则立马视为按压时间已到最高
+                {
+                    m_PressDuringTime = maxPressTime;
+                }
+
+                m_PressDuringTime += Time.deltaTime;
+                playerAni.SetBool(addingID, true);
+                //UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
+
+                if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限
+                {
+                    playerAni.SetBool(addingID, false);
+                    playerAni.SetBool(fullID, true);
+                    if (!AudioManager.instance.isPlaying("AddingForceFinished"))
+                        AudioManager.instance.Play("AddingForceFinished");
+
+                }
+                else
+                {
+                    if (!AudioManager.instance.isPlaying("AddingForceUnfinished"))
+                        AudioManager.instance.Play("AddingForceUnfinished");
+                }
+                return;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                if (m_BlockMouseButton0)
+                {
+                    m_BlockMouseButton0 = false;
+                    return;
+                }
+                if (m_PressDuringTime > 0.01 && m_PressDuringTime < 0.1)//如果按下鼠标的时间过短，则认为按下了0.1s
+                    m_PressDuringTime = 0.1f;
+                if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限，则置为最大时限
+                {
+                    m_PressDuringTime = maxPressTime;
+                }
+                Jumping(ForceValue(m_PressDuringTime, maxForce, minForce));
+                //UISystem.instance.ReleaseEnergy();
                 m_PressDuringTime = 0;
-                //是否需要加入停止动画？？
                 playerAni.SetBool(addingID, false);
                 playerAni.SetBool(fullID, false);
-                m_BlockMouseButton0 = true;    //当按了鼠标右键后会封锁鼠标左键的输入
-                return;
+                AudioManager.instance.Stop("AddingForceUnfinished");
+                AudioManager.instance.Stop("AddingForceFinished");
+                balltail.Play();
             }
-           if(m_FastChargingEnergy)  //如果允许快速充能则立马视为按压时间已到最高
-           {
-               m_PressDuringTime = maxPressTime;
-                playerAni.SetBool(quickChargeID, true);
-                Debug.Log("PlayFull");
-            }
-           
-           m_PressDuringTime += Time.deltaTime;
-           playerAni.SetBool(addingID, true);
-           //UISystem.instance.SetValue(m_PressDuringTime/maxPressTime); //此处返回给UI
-
-           if (m_PressDuringTime > maxPressTime|| m_PressDuringTime == maxPressTime)//如果按下鼠标的时间超过最大按压时限
-            {
-                playerAni.SetBool(addingID, false);
-                playerAni.SetBool(fullID, true);
-                if(!AudioManager.instance.isPlaying("AddingForceFinished"))
-                AudioManager.instance.Play("AddingForceFinished");
-
-            }
-            else
-            {
-                if(!AudioManager.instance.isPlaying("AddingForceUnfinished"))
-                AudioManager.instance.Play("AddingForceUnfinished");
-            }
-            return;
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            if(m_BlockMouseButton0) 
-            {
-                m_BlockMouseButton0 = false;
-                return;
-            }
-            if (m_PressDuringTime > 0.01 && m_PressDuringTime < 0.1)//如果按下鼠标的时间过短，则认为按下了0.1s
-            {
-                m_PressDuringTime = 0.1f;
-                
-            }
-            if (m_PressDuringTime > maxPressTime)//如果按下鼠标的时间超过最大按压时限，则置为最大时限
-            {
-                m_PressDuringTime = maxPressTime;
-            }
-            Jumping(ForceValue(m_PressDuringTime, maxForce, minForce));
-            //UISystem.instance.ReleaseEnergy();
-            m_PressDuringTime = 0;
-            playerAni.SetBool(addingID, false);
-            playerAni.SetBool(fullID, false);
-            playerAni.SetBool(quickChargeID, false);
-            AudioManager.instance.Stop("AddingForceUnfinished");
-            AudioManager.instance.Stop("AddingForceFinished");
 
-        }
     }
 
     void TestKeyBoardsInput()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            if(collisionType[3] && !GameManagement.isGamePaused) 
+            if (collisionType[3])
             {
-                m_NearestDoorController.EnableCanvas();
-                //展示技能树界面
-                m_LearnCavasShowing = true;  //标记当前游戏已被技能学习界面暂停，无法再次Call技能学习
+                if (m_LearnCavasShowing)
+                {
+                   // m_NearestDoorController.DisableCanvas();
+                    //展示技能树界面
+                    m_LearnCavasShowing = false;  //标记当前游戏已出现技能学习界面，无法再次Call技能学习
+                }
+                else
+                {
+                    m_NearestDoorController.EnableCanvas();
+                    m_LearnCavasShowing = true;
+                }
             }
-        } 
-        if(Input.GetKey(KeyCode.M))
+        }
+        if (Input.GetKey(KeyCode.M))
         {
             ScaleCameraLens();
             m_VariableLockScaleCameraTime = m_LockScaleCameraTime;
         }
-        else if(m_VariableLockScaleCameraTime <= 0)
+        else if (m_VariableLockScaleCameraTime <= 0)
         {
             //Decay
             CameraLensDecay();
@@ -243,14 +252,14 @@ public class Player : MonoBehaviour {
 
     void TestEscInput()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)) 
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(GameManagement.isGamePaused) GameManagement.instance.Resume();
+            if (GameManagement.isGamePaused) GameManagement.instance.Resume();
             else GameManagement.instance.Pause();
-            if(m_LearnCavasShowing)
+            if (m_LearnCavasShowing)
             {
-                if(skillCanvas == null)
-                {Debug.LogWarning("SkillCanvas is linked with null, but CanvasShowing variable is set to true.");}
+                if (skillCanvas == null)
+                { Debug.LogWarning("SkillCanvas is linked with null, but CanvasShowing variable is set to true."); }
                 m_LearnCavasShowing = true;
                 skillCanvas.Decline();
             }
@@ -258,7 +267,7 @@ public class Player : MonoBehaviour {
     }
 
 
-    float ForceValue(float pressDuringTime,float maxF,float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
+    float ForceValue(float pressDuringTime, float maxF, float minF)//根据鼠标按下的时长及弹跳力范围，计算弹跳力的大小
     {
         float k = 0f;//小球弹射力的修正系数
         float F = ((maxF - minF) / (maxPressTime - minPressTime)) * (pressDuringTime - maxPressTime) + maxF;//修正前的力，线性变化结果
@@ -267,7 +276,7 @@ public class Player : MonoBehaviour {
         //开口向下的抛物线修正倍率，forceCompensation(大于1)控制抛物线顶点位置，
         k = (float)(a * a + forceCompensation * (1 - a * a));
         if (forceCompensationOpen == true) F *= k;
-        return F; 
+        return F;
     }
 
     public Vector3 ShootAngle
@@ -294,11 +303,15 @@ public class Player : MonoBehaviour {
     public void EnableFastChargingEnergy()
     {
         m_FastChargingEnergy = true;
+        playerAni.SetBool(addingID, true);
+        playerAni.SetBool(fullID, true);
     }
 
     public void DisableFastChargingEnergy()
     {
         m_FastChargingEnergy = false;
+        playerAni.SetBool(addingID, false);
+        playerAni.SetBool(fullID, false);
     }
 
     public void SetNearestDoorController(DoorController controller)
@@ -319,16 +332,22 @@ public class Player : MonoBehaviour {
 
     void ScaleCameraLens()
     {
-        if(virtualCamera.m_Lens.OrthographicSize < maxCameraSize)
-        virtualCamera.m_Lens.OrthographicSize += 0.1f;
+        if (virtualCamera.m_Lens.OrthographicSize < maxCameraSize)
+            virtualCamera.m_Lens.OrthographicSize += 0.1f;
         else virtualCamera.m_Lens.OrthographicSize = maxCameraSize;
     }
 
     void CameraLensDecay()
     {
-        if(virtualCamera.m_Lens.OrthographicSize <= m_CameraSize)
-        virtualCamera.m_Lens.OrthographicSize = m_CameraSize;
+        if (virtualCamera.m_Lens.OrthographicSize <= m_CameraSize)
+            virtualCamera.m_Lens.OrthographicSize = m_CameraSize;
         else virtualCamera.m_Lens.OrthographicSize -= 0.1f;
+    }
+
+    public void SetLockCompletely()
+    {
+        m_LockedCompletely = true;
+        transform.up = new Vector3(0, 1, 0);
     }
 
 }

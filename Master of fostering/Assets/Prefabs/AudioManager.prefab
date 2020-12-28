@@ -49,16 +49,30 @@ MonoBehaviour:
     volumn: 1
     pitch: 1
     loop: 0
+    isObjectWithAudioSource: 0
+    objectName: 
     source: {fileID: 0}
   - name: AddingForceFinished
     clip: {fileID: 8300000, guid: 06ffcd66a34ddd341906017856a11059, type: 3}
     volumn: 1
     pitch: 1
     loop: 0
+    isObjectWithAudioSource: 0
+    objectName: 
     source: {fileID: 0}
   - name: AddingForceShoot
     clip: {fileID: 8300000, guid: b5310a4774523504389029d12c3d679c, type: 3}
     volumn: 1
     pitch: 1
     loop: 0
+    isObjectWithAudioSource: 0
+    objectName: 
+    source: {fileID: 0}
+  - name: BackgroundMusic
+    clip: {fileID: 8300000, guid: 80cdccbc2485672428fd30f6acdaecb9, type: 3}
+    volumn: 1
+    pitch: 1
+    loop: 1
+    isObjectWithAudioSource: 0
+    objectName: 
     source: {fileID: 0}

@@ -29,6 +29,11 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        Play("BackgroundMusic");
+    }
+
     // Start is called before the first frame update
     public void Play(string name)
     {

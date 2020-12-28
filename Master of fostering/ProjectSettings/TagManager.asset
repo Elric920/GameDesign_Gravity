@@ -46,6 +46,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: selflight
+    uniqueID: 3969265113
+    locked: 0
   - name: Background
     uniqueID: 2519815877
     locked: 0

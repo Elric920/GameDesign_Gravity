@@ -6,6 +6,7 @@ public class DetectWall : MonoBehaviour
 {
     Player player;
     public GameObject tipsMenu;
+    DoorController doorController;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,22 +14,22 @@ public class DetectWall : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-       if (other.tag == "stableStone")
+        if (other.tag == "stableStone")
         {
             player.SetCollisionTag(0, true);
         }
-            
+
         else if (other.tag == "semiStableStone")
         {
             player.SetCollisionTag(1, true);
         }
-            
+
         else if (other.tag == "nonStableStone")
         {
             player.SetCollisionTag(2, true);
         }
 
-        else if(other.tag == "door")
+        else if (other.tag == "door")
         {
             player.SetCollisionTag(3, true);
             player.SetNearestDoorController(other.GetComponent<DoorController>());
@@ -42,22 +43,24 @@ public class DetectWall : MonoBehaviour
         {
             player.SetCollisionTag(0, false, false);
         }
-            
+
         else if (other.tag == "semiStableStone")
         {
-            player.SetCollisionTag(1,  false, false);
-        }
-            
-        else if (other.tag == "nonStableStone")
-        {
-            player.SetCollisionTag(2,  false, false);
+            player.SetCollisionTag(1, false, false);
         }
 
-        else if(other.tag == "door")
+        else if (other.tag == "nonStableStone")
         {
-            player.SetCollisionTag(3,  false, false);
+            player.SetCollisionTag(2, false, false);
+        }
+
+        else if (other.tag == "door")
+        {
+            player.SetCollisionTag(3, false, false);
             player.SetNearestDoorController(null);
             tipsMenu.SetActive(false);
+            doorController = other.GetComponent<DoorController>();
+            //doorController.DisableCanvas();
         }
     }
 }

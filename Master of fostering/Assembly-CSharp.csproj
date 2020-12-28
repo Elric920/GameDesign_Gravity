@@ -67,10 +67,13 @@
     <Compile Include="Assets\Scripts\AttachPlayer.cs" />
     <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\AutoSave.cs" />
+    <Compile Include="Assets\Scripts\ButtonControl.cs" />
+    <Compile Include="Assets\Scripts\CheerUp.cs" />
     <Compile Include="Assets\Scripts\CollectEnvelope.cs" />
     <Compile Include="Assets\Scripts\CollectKey.cs" />
     <Compile Include="Assets\Scripts\DeathArea.cs" />
     <Compile Include="Assets\Scripts\DecorateScreenControl.cs" />
+    <Compile Include="Assets\Scripts\DetectPlayer.cs" />
     <Compile Include="Assets\Scripts\DetectWall.cs" />
     <Compile Include="Assets\Scripts\DoorController.cs" />
     <Compile Include="Assets\Scripts\FastChargingEnergy.cs" />

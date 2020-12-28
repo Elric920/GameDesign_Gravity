@@ -27,7 +27,7 @@ namespace Tools{
                latestSavePoints[t] = latestSavePoints[t-1];
            }
            latestSavePoints[0] = new SavePointMap(savePointName, vector);
-           if(end < 5) end += 1;
+           if(end < 4) end += 1;
            for(int t = 0; t<end; t++)
            {
                Debug.Log(t + "存档效果" +latestSavePoints[t] );
